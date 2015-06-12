@@ -18,15 +18,16 @@ class Gui;
 class inst_graph;
 class plugin_factory;
 
+#define CONFIG_MAXSIZE (1024 * 1024)
+#define DEFAULT_CONFIG_FILE	"acv.xml"
+#define USER_CONFIG_FILE	"acv.user.xml"
+#define DEFAULT_PLUGIN_DIR	"plugins"
 
 class acv : public QApplication {
 	Q_OBJECT
 
 public:
-	static uint32_t const CONFIG_MAXSIZE = 1024 * 1024;
-	static constexpr char const* DEFAULT_CONFIG_FILE = "acv.xml";
-	static constexpr char const* USER_CONFIG_FILE = "acv.user.xml";
-	static constexpr char const* DEFAULT_PLUGIN_DIR = "plugins";
+	
 
 public:
 	acv(int &argc, char **argv);

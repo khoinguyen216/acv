@@ -21,6 +21,7 @@ public:
 	{
 		 id_ = b.id();
 		 plugin_ = b.plugin();
+		 return *this;
 	}
 
 	QString const& id() const { return id_; }

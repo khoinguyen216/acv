@@ -23,6 +23,7 @@ public:
 		 socket_a_	= b.socket_a();
 		 inst_b_	= b.inst_b();
 		 socket_b_	= b.socket_b();
+		 return *this;
 	}
 
 	QString const& inst_a() const { return inst_a_; }
