@@ -1,0 +1,4 @@
+INSTALL (	FILES
+			acv.xml
+			DESTINATION .
+			COMPONENT acv )
