@@ -137,8 +137,7 @@ void acv::setup()
 			for (auto const& conf : info.config()) {
 				QMetaObject::invokeMethod(inst, conf.first.toStdString().c_str(),
 						Q_ARG(QString, conf.second));
-			}
-			QMetaObject::invokeMethod(inst, "start");
+			}			
 			inst_graph_->add_instance(info.id(), inst);
 		}
 	}

@@ -21,7 +21,7 @@ class plugin_factory;
 #define CONFIG_MAXSIZE (1024 * 1024)
 #define DEFAULT_CONFIG_FILE	"acv.xml"
 #define USER_CONFIG_FILE	"acv.user.xml"
-#define DEFAULT_PLUGIN_DIR	"plugins"
+#define DEFAULT_PLUGIN_DIR	"plugin"
 
 class acv : public QApplication {
 	Q_OBJECT
