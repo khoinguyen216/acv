@@ -1,3 +1,2 @@
-ADD_SUBDIRECTORY ( imagefeed )
-ADD_SUBDIRECTORY ( imageshow )
-#ADD_SUBDIRECTORY ( ffld_detector )
+ADD_SUBDIRECTORY ( frame_in )
+ADD_SUBDIRECTORY ( noob_md )

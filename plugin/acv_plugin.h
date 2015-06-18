@@ -18,15 +18,15 @@ struct plugin_socket {
 
 class acv_plugin : public QObject {
 public:
-	virtual    ~acv_plugin() {}
+	virtual	~acv_plugin() {}
 
-	virtual plugin_socket const expose_socket(QString const& s) const = 0;
+	virtual void init() = 0;
+	virtual	plugin_socket const expose_socket(QString const& s) const = 0;
 
 public slots:
-	virtual void start() = 0;
-	virtual void stop() = 0;
-	virtual void restart() = 0;
+#ifdef WITH_GUI
 	virtual void setupui(QWidget *parent) = 0;
+#endif
 };
 
 Q_DECLARE_INTERFACE(acv_plugin, "acv_plugin")

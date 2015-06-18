@@ -22,14 +22,18 @@ INCLUDE_DIRECTORIES (
 LINK_DIRECTORIES (
 	${FFmpeg_LIBDIR} ) 
 
-QT5_WRAP_UI ( QT_UI_HEADERS mainwindow.ui )
+IF ( WITH_GUI )
+	QT5_WRAP_UI ( QT_UI_HEADERS mainwindow.ui )
+	SET ( HEADER_FILES ${HEADER_FILES} ${QT_UI_HEADERS} gui.h )
+	SET ( SOURCE_FILES ${SOURCE_FILES} gui.cpp )
+ENDIF()
 
-SET ( HEADER_FILES ${QT_UI_HEADERS}
-	gui.h version.h inst_info.h cable_info.h plugin_factory.h inst_graph.h
+SET ( HEADER_FILES ${HEADER_FILES}
+	version.h inst_info.h cable_info.h plugin_factory.h inst_graph.h
 	acv_config.h )
 
-SET ( SOURCE_FILES
-    main.cpp acv.cpp gui.cpp plugin_factory.cpp inst_graph.cpp cable_info.cpp
+SET ( SOURCE_FILES ${SOURCE_FILES}
+    main.cpp acv.cpp plugin_factory.cpp inst_graph.cpp cable_info.cpp
 	opencv_link.cpp )
 
 # Fix RPATH
@@ -45,7 +49,10 @@ IF ( MSVC )
 ENDIF()
 
 ADD_EXECUTABLE ( ${MOD_NAME} ${SOURCE_FILES} ${HEADER_FILES} )
-QT5_USE_MODULES ( ${MOD_NAME} Widgets Xml )
+QT5_USE_MODULES ( ${MOD_NAME} Core Xml )
+IF ( WITH_GUI )
+	QT5_USE_MODULES ( ${MOD_NAME} Widgets )
+ENDIF()
 
 TARGET_LINK_LIBRARIES ( ${MOD_NAME}
 	${Boost_LIBRARIES} ${FFmpeg_LIBRARIES}

@@ -1,27 +1,14 @@
 <?xml version='1.0' encoding='us-utf8'?>
 <acv>
 	<instances>
-		<instance id="framein0" plugin="imagefeed">
-			<option name="src" value="/home/nguyen/project/ffld2-build/car_test1"/>
-			<option name="interval" value="1000s"/>
-			<option name="loop" value="no"/>
-			<option name="autostart" value="no"/>
+		<instance id="Frame In" plugin="frame_in">
+			<option name="source" type="string" value="/home/nguyen/clipboard/LevisHK_Cam6_12012014140000.MP4"/>
+			<option name="autorecover" type="boolean" value="yes"/>
 		</instance>
-		<instance id="frameout0" plugin="imageshow">
-		</instance>
-		<instance id="detector0" plugin="ffld_detector">
-			<option name="interval" value="10"/>
-			<option name="threshold" value="-1.6"/>
-			<option name="model" value="${APP_DIR}/model/myautonewbm3.txt"/>
-		</instance>
-		<instance id="logic0" plugin="logic">
-			<option name="exit_on_error" value="no"/>
+		<instance id="Motion Detector" plugin="noob_md">
 		</instance>
 	</instances>
 	<connections>
-		<cable end0="framein0.video" end1="frameout0.video"/>
-		<cable end0="framein0.status" end1="frameout0.video_status"/>
-		<cable end0="framein0.control" end1="frameout0.framein_control"/>
-		<cable end0="framein0.video" end1="detector0.video"/>
+		<cable end0="Frame In.vout" end1="Motion Detector.video"/>
 	</connections>
 </acv>

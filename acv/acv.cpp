@@ -7,23 +7,30 @@
 #include <QDir>
 #include <QDomDocument>
 #include <QLibrary>
+#ifdef WITH_GUI
 #include <QMainWindow>
+#endif
 #include <QPluginLoader>
 
 #include "acv_plugin.h"
 #include "cable_info.h"
+#ifdef WITH_GUI
 #include "gui.h"
+#endif
 #include "inst_graph.h"
 #include "inst_info.h"
 #include "plugin_factory.h"
 #include "version.h"
 
+
 using std::find_if;
 
-
 acv::acv(int &argc, char **argv) :
-	QApplication(argc, argv),
-	mainwnd_(new Gui())
+#ifdef WITH_GUI
+	QApplication(argc, argv)
+#else
+	QCoreApplication(argc, argv)
+#endif
 {
 	setObjectName("acv");
 
@@ -31,6 +38,10 @@ acv::acv(int &argc, char **argv) :
 	setOrganizationDomain("kaisquare.com");
 	setApplicationName("acv");
 	setApplicationVersion(ACV_VERSION);
+
+#ifdef WITH_GUI
+	mainwnd_ = new Gui();
+#endif
 
 	auto plugindir = applicationDirPath() + "/" + DEFAULT_PLUGIN_DIR;
 	plugin_factory_ = new plugin_factory(plugindir);
@@ -44,7 +55,6 @@ acv::~acv()
 
 void acv::process_cmdargs()
 {
-
 }
 
 void acv::load_config()
@@ -89,10 +99,11 @@ void acv::load_config_from_xml(QString const& path, acv_config& config)
 		while (!optnode.isNull()) {
 			auto const& attrs = optnode.attributes();
 			auto const& name = attrs.namedItem("name").nodeValue();
+			auto const& type = attrs.namedItem("type").nodeValue();
 			auto value = attrs.namedItem("value").nodeValue();
 			// Expand macros in option values
-			value.replace("${APP_DIR}", QApplication::applicationDirPath());
-			it->config(name, value);
+			value.replace("${APP_DIR}", applicationDirPath());
+			it->option(name, type, value);
 
 			optnode = optnode.nextSiblingElement("option");
 		}
@@ -121,7 +132,9 @@ void acv::load_config_from_xml(QString const& path, acv_config& config)
 
 void acv::setup()
 {
+#ifdef WITH_GUI
 	setup_ui();
+#endif
 
 	// Load all available plugins
 	plugin_factory_->load_all();
@@ -133,11 +146,12 @@ void acv::setup()
 	for (auto const& info : config_.insts) {
 		auto inst = plugin_factory_->create_instance(info.id(), info.plugin());
 		if (inst != 0) {
+			inst->init();
 			emit instance_created(inst);
-			for (auto const& conf : info.config()) {
-				QMetaObject::invokeMethod(inst, conf.first.toStdString().c_str(),
-						Q_ARG(QString, conf.second));
-			}			
+			for (auto const& opt : info.options()) {
+				QMetaObject::invokeMethod(inst, opt.key.toStdString().c_str(),
+						Q_ARG(QString, opt.value));
+			}
 			inst_graph_->add_instance(info.id(), inst);
 		}
 	}
@@ -150,8 +164,10 @@ void acv::setup()
 	}
 }
 
+#ifdef WITH_GUI
 void acv::setup_ui()
 {
 	mainwnd_->setup_connections(this);
 	mainwnd_->show();
 }
+#endif

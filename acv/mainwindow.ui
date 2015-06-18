@@ -147,26 +147,26 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(214, 214, 214);</string>
+          </property>
           <property name="text">
            <string>No instance selected</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="Line" name="line">
-          <property name="styleSheet">
-           <string notr="true">color: blue;</string>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QStackedWidget" name="instStack">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <widget class="QWidget" name="page"/>
           <widget class="QWidget" name="page_2"/>
          </widget>

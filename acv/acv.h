@@ -1,33 +1,35 @@
 #ifndef ACV_H
 #define ACV_H
 
-#include <QHash>
+#ifdef WITH_GUI
 #include <QApplication>
-#include <QPluginLoader>
 #include <QMainWindow>
-#include <QDomDocument>
+#else
+#include <QCoreApplication>
+#endif
 
 #include "acv_config.h"
 
 
-class QPluginLoader;
-
-class acv_plugin;
-class framein_plugin;
+#ifdef WITH_GUI
 class Gui;
+#endif
+class acv_plugin;
 class inst_graph;
 class plugin_factory;
 
-#define CONFIG_MAXSIZE (1024 * 1024)
-#define DEFAULT_CONFIG_FILE	"acv.xml"
-#define USER_CONFIG_FILE	"acv.user.xml"
-#define DEFAULT_PLUGIN_DIR	"plugin"
+#define CONFIG_MAXSIZE			(1024 * 1024)
+#define DEFAULT_CONFIG_FILE		"acv.xml"
+#define USER_CONFIG_FILE		"acv.user.xml"
+#define DEFAULT_PLUGIN_DIR		"plugin"
 
-class acv : public QApplication {
+#ifdef WITH_GUI
+class acv : public QApplication
+#else
+class acv : public QCoreApplication
+#endif
+{
 	Q_OBJECT
-
-public:
-	
 
 public:
 	acv(int &argc, char **argv);
@@ -50,7 +52,9 @@ private:
 	plugin_factory*		plugin_factory_;
 	inst_graph*			inst_graph_;
 
+#ifdef WITH_GUI
 	Gui*    mainwnd_;
+#endif
 };
 
 

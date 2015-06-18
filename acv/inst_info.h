@@ -3,10 +3,24 @@
 
 #include <cassert>
 
-#include <QPair>
 #include <QString>
 #include <QVector>
 
+
+struct inst_option {
+	QString key;
+	QString type;
+	QString value;
+
+	inst_option() {}
+
+	inst_option(QString const& k, QString const& t, QString const& v)
+	{
+		key = k;
+		type = t;
+		value = v;
+	}
+};
 
 class inst_info {
 public:
@@ -26,16 +40,17 @@ public:
 
 	QString const& id() const { return id_; }
 	QString const& plugin() const { return plugin_; }
-	QVector<QPair<QString, QString>> const& config() const { return config_; }
-	void config(QString const& k, QString const& v)
+	QVector<inst_option> const& options() const { return options_; }
+	void option(QString const& k, QString const& t, QString const& v)
 	{
-		config_.push_back(QPair<QString, QString>(k, v));
+		auto opt = inst_option(k, t, v);
+		options_.push_back(opt);
 	}
 
 private:
 	QString id_;
 	QString plugin_;
-	QVector<QPair<QString, QString>> config_;
+	QVector<inst_option> options_;
 
 };
 
