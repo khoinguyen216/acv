@@ -5,7 +5,6 @@
 #include <QDebug>
 
 
-
 rtsp_source::rtsp_source(QString const& s) : frame_source(s)
 {
 	assert(!s.isEmpty());

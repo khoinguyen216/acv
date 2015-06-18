@@ -34,6 +34,11 @@ plugin_socket const noob_md::expose_socket(QString const& s) const
 	 return sockets_[s];
 }
 
+plugin_options const& noob_md::options() const
+{
+	 return options_;
+}
+
 void noob_md::init()
 {
 	// Set up socket interfaces

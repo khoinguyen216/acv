@@ -3,12 +3,14 @@
 	<instances>
 		<instance id="Frame In" plugin="frame_in">
 			<option name="source" type="string" value="/home/nguyen/clipboard/LevisHK_Cam6_12012014140000.MP4"/>
-			<option name="autorecover" type="boolean" value="yes"/>
+			<option name="recover_on_error" type="boolean" value="no"/>
+			<option name="recover_interval" type="number" value="1"/>
+			<option name="read_timeout" type="number" value="2"/>
 		</instance>
 		<instance id="Motion Detector" plugin="noob_md">
 		</instance>
 	</instances>
 	<connections>
-		<cable end0="Frame In.vout" end1="Motion Detector.video"/>
+		<!--<cable end0="Frame In.vout" end1="Motion Detector.video"/>-->
 	</connections>
 </acv>

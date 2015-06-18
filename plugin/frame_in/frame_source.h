@@ -1,6 +1,7 @@
 #ifndef FRAME_SOURCE_H
 #define FRAME_SOURCE_H
 
+#include <QDateTime>
 #include <QObject>
 #include <QString>
 
@@ -23,7 +24,7 @@ signals:
 	virtual void started() = 0;
 	virtual void stopped() = 0;
 	virtual void frame(cv::Mat const& f, double ts) = 0;
-	virtual void error(QString const& e) = 0;
+	virtual void error(QDateTime const& ts, QString const& e) = 0;
 
 protected:
 	QString source_;

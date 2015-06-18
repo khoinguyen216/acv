@@ -1,16 +1,19 @@
 #include "../frame_source.h"
 
-#include <QTimer>
+#include <QTime>
 
 
-class rtsp_source : public frame_source {
+class QTimer;
+class MjpgCapture;
+
+class http_mjpg_source : public frame_source {
 	Q_OBJECT
 
 	unsigned const DEFAULT_FPS = 50;
 
 public:
-	rtsp_source(QString const& s);
-	~rtsp_source();
+	http_mjpg_source(QString const& s);
+	~http_mjpg_source();
 
 public slots:
 	void start() override;
@@ -20,12 +23,13 @@ signals:
 	void started() override;
 	void stopped() override;
 	void frame(cv::Mat const& f, double ts) override;
-	void error(QString const& e) override;
+	void error(QDateTime const& ts, QString const& e) override;
 
 private slots:
 	void next();
 
 private:
-	QTimer				timer_;
-	QTimer				disconnect_timer_;
+	MjpgCapture*		cap_ = 0;
+	QTimer*				timer_;
+	QTime				start_ts_;
 };

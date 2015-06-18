@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES (
 	${Qt5Widgets_INCLUDE_DIRS} )
 
 LINK_DIRECTORIES (
+	${Boost_LIBRARY_DIRS}
 	${OpenCV_LIBDIR} )
 
 IF ( WITH_GUI )
@@ -16,10 +17,13 @@ ENDIF()
 
 SET ( HEADER_FILES ${HEADER_FILES} noob_md.h md_worker.h
 	MotionDetection.h target.h bwlabel.h utilities.h ImageEnhancement.h
+	TrackingManager.h CompressiveTracker.h tracklet.h DLBPUtilities.h
 	ssim.h )
 SET ( SOURCE_FILES ${SOURCE_FILES} noob_md.cpp md_worker.cpp
-	MotionDetection.cpp target.cpp utilities.cpp ImageEnhancement.cpp
-	ssim.cpp )
+	MotionDetection.cpp target.cpp utilities.cpp ImageEnhancement.cpp )
+	#TrackingManager.cpp CompressiveTracker.cpp tracklet.cpp DLBPUtilities.cpp
+
+	#ssim.cpp )
 
 ADD_DEFINITIONS ( -DQT_PLUGIN )
 

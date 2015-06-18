@@ -7,6 +7,7 @@
 #include <QHash>
 #include <QtPlugin>
 #include <QString>
+#include <QVector>
 
 
 class QWidget;
@@ -16,12 +17,21 @@ struct plugin_socket {
 	QHash<QString, QString> wires;
 };
 
+struct plugin_option {
+	QString name;
+	QString type;
+	QString desc;
+};
+
+typedef QVector<plugin_option> plugin_options;
+
 class acv_plugin : public QObject {
 public:
 	virtual	~acv_plugin() {}
 
 	virtual void init() = 0;
 	virtual	plugin_socket const expose_socket(QString const& s) const = 0;
+	virtual plugin_options const& options() const = 0;
 
 public slots:
 #ifdef WITH_GUI

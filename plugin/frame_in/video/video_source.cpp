@@ -5,17 +5,17 @@
 #include <QDebug>
 
 
-video_source::video_source(QString const& s) : frame_source(s)
+video_source::video_source(QString const& s) : frame_source(s),
+	timer_(new QTimer(this))
 {
 	assert(!s.isEmpty());
 
-	connect(&timer_, SIGNAL(timeout()), this, SLOT(next()));
+	connect(timer_, SIGNAL(timeout()), this, SLOT(next()));
 }
 
 video_source::~video_source()
 {
-	if (cap_ != 0)
-		delete cap_;
+	delete cap_;
 }
 
 void video_source::start()
@@ -27,23 +27,23 @@ void video_source::start()
 	if (cap_->isOpened()) {
 		double fps = cap_->get(CV_CAP_PROP_FPS);
 		if (fps < 0.1) fps = DEFAULT_FPS;
-		timer_.setInterval(1000 / fps);
-		timer_.start();
+		timer_->setInterval(1000 / fps);
+		timer_->start();
 		emit started();
 	} else {
 		delete cap_;
 		cap_ = 0;
-		emit error(QString("Could not open %1").arg(source_));
+		emit error(QDateTime::currentDateTime(),
+				QString("Could not open %1").arg(source_));
 	}
 }
 
 void video_source::stop()
 {
 	if (cap_) {
-		timer_.stop();
+		timer_->stop();
 		cap_->release();
-		delete cap_;
-		cap_ = 0;
+		delete cap_; cap_ = 0;
 		emit stopped();
 	}
 }
@@ -56,7 +56,7 @@ void video_source::next()
 	*cap_ >> f;
 
 	if (f.empty()) {
-		emit error("Frame is empty");
+		emit error(QDateTime::currentDateTime(), "Frame is empty");
 		stop();
 		return;
 	}

@@ -29,6 +29,7 @@ public:
 	noob_md();
 	~noob_md();
 	plugin_socket const expose_socket(QString const& s) const override;
+	plugin_options const& options() const override;
 	void init() override;
 
 public slots:
@@ -49,6 +50,7 @@ private:
 
 private:
 	QHash<QString, plugin_socket>	sockets_;
+	plugin_options		options_;
 	QThread*			worker_thread_ = 0;
 	md_worker*			worker_ = 0;
 

@@ -149,8 +149,20 @@ void acv::setup()
 			inst->init();
 			emit instance_created(inst);
 			for (auto const& opt : info.options()) {
-				QMetaObject::invokeMethod(inst, opt.key.toStdString().c_str(),
-						Q_ARG(QString, opt.value));
+				if (opt.type == "string")
+					QMetaObject::invokeMethod(inst, opt.key.toStdString().c_str(),
+							Q_ARG(QString, opt.value));
+				else if (opt.type == "number")
+					QMetaObject::invokeMethod(inst, opt.key.toStdString().c_str(),
+							Q_ARG(double, opt.value.toDouble()));
+				else if (opt.type == "boolean") {
+					bool v = false;
+					if (opt.value == "yes")
+						v = true;
+					QMetaObject::invokeMethod(inst, opt.key.toStdString().c_str(),
+							Q_ARG(bool, v));
+				}
+
 			}
 			inst_graph_->add_instance(info.id(), inst);
 		}

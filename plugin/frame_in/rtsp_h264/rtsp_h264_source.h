@@ -1,18 +1,22 @@
 #include "../frame_source.h"
 
-#include <QTimer>
+#include <QTime>
 
 
 class QTimer;
 
-class video_source : public frame_source {
+class TaskScheduler;
+class UsageEnvironemt;
+
+
+class rtsp_h264_source : public frame_source {
 	Q_OBJECT
 
-	unsigned const DEFAULT_FPS = 25;
+	unsigned const DEFAULT_FPS = 50;
 
 public:
-	video_source(QString const& s);
-	~video_source();
+	rtsp_h264_source(QString const& s);
+	~rtsp_h264_source();
 
 public slots:
 	void start() override;
@@ -28,6 +32,6 @@ private slots:
 	void next();
 
 private:
-	cv::VideoCapture*	cap_ = 0;
 	QTimer*				timer_;
+	QTime				start_ts_;
 };

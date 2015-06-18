@@ -3,16 +3,14 @@
 #include <QTimer>
 
 
-class QTimer;
-
-class video_source : public frame_source {
+class rtsp_source : public frame_source {
 	Q_OBJECT
 
-	unsigned const DEFAULT_FPS = 25;
+	unsigned const DEFAULT_FPS = 50;
 
 public:
-	video_source(QString const& s);
-	~video_source();
+	rtsp_source(QString const& s);
+	~rtsp_source();
 
 public slots:
 	void start() override;
@@ -28,6 +26,6 @@ private slots:
 	void next();
 
 private:
-	cv::VideoCapture*	cap_ = 0;
-	QTimer*				timer_;
+	QTimer				timer_;
+	QTimer				disconnect_timer_;
 };
