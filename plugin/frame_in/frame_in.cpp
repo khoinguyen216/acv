@@ -117,7 +117,8 @@ void frame_in::source(QString const& v)
 	connect_to_source(fs_);
 
 #ifdef WITH_GUI
-	ui_->pathEdit->setText(v);
+	if (ui_->pathEdit->text() != source_)
+		ui_->pathEdit->setText(v);
 #endif
 }
 
