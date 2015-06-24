@@ -35,7 +35,7 @@ void md_worker::process_frame(cv::Mat const& fr, double ts)
 
 	ts /= 1000;
 	cv::Mat resized;
-	cv::resize(fr, resized, cv::Size(), 0.25, 0.25);
+	cv::resize(fr, resized, cv::Size(160, 120));
 
 	md_->MotionDetection(prevfr_, resized, objs, prevts_, ts, true);
 	md_->MotionCorrection(prevobjs_, objs, prevts_, ts);

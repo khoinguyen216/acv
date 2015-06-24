@@ -184,7 +184,6 @@ void IncreaseContrast(const Mat& image, Mat & new_image);
 
 Point2f GetRectCenter(const Rect rect);
 
-bool SimilarImagePatch_ssim(const Mat& backgroundImage, const Mat& currImage, const Rect& origBB, const Rect& currBB, float threshold = 0.65);
 cv::Scalar HSVtoRGBcvScalar(int H, int S, int V);
 
 std::vector<std::string> &ssplit(const std::string &s, char delim, std::vector<std::string> &elems);

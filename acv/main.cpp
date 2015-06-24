@@ -9,6 +9,7 @@ using namespace std;
 namespace fs = boost::filesystem;
 
 extern void ffmpeg_link();
+extern void opencv_link();
 
 int main(int argc, char **argv)
 {
@@ -16,6 +17,7 @@ int main(int argc, char **argv)
 	fs::exists(p);
 
 	ffmpeg_link();
+	opencv_link();
 
 	acv app(argc, argv);
 	app.load_config();

@@ -36,6 +36,7 @@ FIND_PACKAGE ( Boost 1.57.0
     COMPONENTS
         date_time filesystem system thread program_options
     REQUIRED )
+ADD_DEFINITIONS ( -DBOOST_ALL_NO_LIB )
 
 # Qt5
 FIND_PACKAGE ( Qt5 5.4.1 REQUIRED Widgets )

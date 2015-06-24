@@ -77,9 +77,10 @@ ENDIF()
 SET ( DIRS
 	${Boost_LIBRARY_DIRS}
 	${FFmpeg_LIBDIR}
+	${FFmpeg_BINDIR}
 	${Qt5_LIBDIR}
 	${OpenCV_LIBDIR} )
 INSTALL ( CODE "
-    INCLUDE ( BundleUtilities )
+    INCLUDE ( ${CMAKE_SOURCE_DIR}/cmake/BundleUtilities.cmake )
     fixup_bundle (\"${APPS}\" \"\" \"${DIRS}\") "
     COMPONENT ${MOD_NAME} )

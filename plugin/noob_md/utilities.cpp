@@ -533,21 +533,6 @@ Point2f GetRectCenter(const Rect rect)
 	return Point2f(rect.x + rect.width/2.0, rect.y + rect.height/2.0);
 }
 
-bool SimilarImagePatch_ssim(const Mat& backgroundImage, const Mat& currImage, const Rect& origBB, const Rect& currBB, float threshold)
-{
-	Mat ssim, mask;
-	Mat origROI, currROI;
-	origROI = backgroundImage(currBB);
-	currROI = currImage(currBB);
-	/*imshow("origROI", origROI);
-	imshow("currROI", currROI);*/
-	double sim = calcSSIM(origROI, currROI, ssim, mask, 0, CV_BGR2YUV, 0.01, 0.03,255, 24/*origROI.cols*/, 5, 1.5);
-	bool result = false;
-	cout << "ssim " << sim << endl;
-	if (sim > threshold)
-		result = true;
-	return result;
-}
 int rndint(int min,int max)
 {
 	return min + (rand() % (int)(max - min + 1));

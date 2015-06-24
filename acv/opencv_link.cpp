@@ -1,8 +1,16 @@
 #include <opencv2/opencv.hpp>
 
+#include <QMetaType>
+
+
 void opencv_link()
-{		
-	cv::Mat m;
-	cv::cvtColor(m, m, cv::COLOR_BGR2GRAY);
-	cv::imshow("", m);
+{
+	// Pull in highgui
+	cv::Mat m(1, 1, CV_8UC1);
+	cv::VideoCapture cap("");
+
+	// Pull in video
+	cv::KalmanFilter kalman;
+	
+	qRegisterMetaType<cv::Mat>("cv::Mat");
 }
