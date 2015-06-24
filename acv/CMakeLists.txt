@@ -18,10 +18,12 @@ INCLUDE_DIRECTORIES (
 	../plugin
 	${Boost_INCLUDE_DIRS}
 	${FFmpeg_INCLUDE_DIRS}
+	${LiveMedia_INCLUDE_DIRS}
 	${OpenCV_INCLUDE_DIRS})
 
 LINK_DIRECTORIES (
-	${FFmpeg_LIBDIR} ) 
+	${FFmpeg_LIBDIR}
+	${LiveMedia_LIBDIR} ) 
 
 IF ( WITH_GUI )
 	QT5_WRAP_UI ( QT_UI_HEADERS mainwindow.ui )
@@ -35,7 +37,7 @@ SET ( HEADER_FILES ${HEADER_FILES}
 
 SET ( SOURCE_FILES ${SOURCE_FILES}
     main.cpp acv.cpp plugin_factory.cpp inst_graph.cpp cable_info.cpp
-	ffmpeg_link.cpp opencv_link.cpp )
+	ffmpeg_link.cpp livemedia_link.cpp opencv_link.cpp )
 
 # Fix RPATH
 SET ( CMAKE_SKIP_BUILD_RPATH FALSE )
@@ -56,7 +58,7 @@ IF ( WITH_GUI )
 ENDIF()
 
 TARGET_LINK_LIBRARIES ( ${MOD_NAME}
-	${Boost_LIBRARIES} ${FFmpeg_LIBRARIES}
+	${Boost_LIBRARIES} ${FFmpeg_LIBRARIES} ${LiveMedia_LIBRARIES}
 	${OpenCV_LIBRARIES} )
 
 # Copy configuration files
@@ -78,6 +80,7 @@ SET ( DIRS
 	${Boost_LIBRARY_DIRS}
 	${FFmpeg_LIBDIR}
 	${FFmpeg_BINDIR}
+	${LiveMedia_LIBDIR}
 	${Qt5_LIBDIR}
 	${OpenCV_LIBDIR} )
 INSTALL ( CODE "
