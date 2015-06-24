@@ -24,7 +24,7 @@ SET ( HEADER_FILES ${QT_UI_HEADERS} frame_in.h frame_source.h
 	rtsp/rtsp_source.h
 	rtsp/rtsp_handlers.h
 	rtsp/sched_thread.h
-	rtsp/H264DecoderSink.h
+	rtsp/DecoderSink.h
 	rtsp/MPRTSPClient.h )
 SET ( SOURCE_FILES frame_in.cpp
 	video/video_source.cpp
@@ -32,7 +32,7 @@ SET ( SOURCE_FILES frame_in.cpp
 	http_mjpg/MjpgCapture.cpp
 	rtsp/rtsp_source.cpp
 	rtsp/rtsp_handlers.cpp
-	rtsp/H264DecoderSink.cpp
+	rtsp/DecoderSink.cpp
 	rtsp/MPRTSPClient.cpp )
 
 ADD_DEFINITIONS ( -DQT_PLUGIN )

@@ -4,7 +4,7 @@
 
 #include <liveMedia.hh>
 
-#include "H264DecoderSink.h"
+#include "DecoderSink.h"
 #include "MPRTSPClient.h"
 
 
@@ -43,12 +43,9 @@ void after_setup(RTSPClient* client, int result, char* resultstr)
 
 	do {
 		if (result != 0) break;
-		auto const& codec = subs->codecName();
-		if (strcmp(codec, "H264") == 0) {
-			subs->sink = H264DecoderSink::createNew(env, *subs,
-													cl->parent_, cl->url());
-		} else if (strcmp(codec, "MJPG") == 0) {
-
+		if (strcmp(subs->mediumName(), "video") == 0) {
+			subs->sink = DecoderSink::createNew(env, *subs,
+												cl->parent_, cl->url());
 		}
 		if (subs->sink == 0) break;
 		subs->miscPtr = cl;

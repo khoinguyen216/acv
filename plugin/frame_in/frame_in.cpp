@@ -160,6 +160,7 @@ void frame_in::on_started()
 	ui_->pathEdit->setEnabled(false);
 	ui_->startButton->setEnabled(false);
 	ui_->stopButton->setEnabled(true);
+	ui_->errorLabel->clear();
 #endif
 }
 
@@ -170,6 +171,7 @@ void frame_in::on_stopped()
 	ui_->pathEdit->setEnabled(true);
 	ui_->startButton->setEnabled(true);
 	ui_->stopButton->setEnabled(false);
+	scene_.clear();
 #endif
 }
 

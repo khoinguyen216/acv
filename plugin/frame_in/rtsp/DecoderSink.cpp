@@ -1,4 +1,4 @@
-#include "H264DecoderSink.h"
+#include "DecoderSink.h"
 
 #include <cassert>
 #include <cstring>
@@ -7,18 +7,18 @@
 #include <QDebug>
 
 
-H264DecoderSink* H264DecoderSink::createNew(UsageEnvironment&	env,
-											MediaSubsession&	subsession,
-											void*				consumer,
-											char const*			streamid)
+DecoderSink* DecoderSink::createNew(UsageEnvironment&	env,
+									MediaSubsession&	subsession,
+									void*				consumer,
+									char const*			streamid)
 {
-	return new H264DecoderSink(env, subsession, consumer, streamid);
+	return new DecoderSink(env, subsession, consumer, streamid);
 }
 
-H264DecoderSink::H264DecoderSink(UsageEnvironment&	env,
-								MediaSubsession&	subsession,
-								void				*consumer,
-								char const*			streamid) : MediaSink(env),
+DecoderSink::DecoderSink(UsageEnvironment&	env,
+						MediaSubsession&	subsession,
+						void				*consumer,
+						char const*			streamid) : MediaSink(env),
 	consumer_(consumer),
 	subsession_(subsession)
 {
@@ -29,7 +29,7 @@ H264DecoderSink::H264DecoderSink(UsageEnvironment&	env,
 	recvbuf_[0] = recvbuf_[1] = recvbuf_[2] = 0; recvbuf_[3] = 1;
 }
 
-H264DecoderSink::~H264DecoderSink()
+DecoderSink::~DecoderSink()
 {
 	 delete[] recvbuf_;
 	 free(streamid_);
@@ -40,11 +40,27 @@ H264DecoderSink::~H264DecoderSink()
 	 av_frame_free(&rgb_frame_);
 }
 
-void H264DecoderSink::init_decoder()
+void DecoderSink::init_decoder()
 {
 	av_init_packet(&packet_);
 	decoded_frame_	= av_frame_alloc();
 	rgb_frame_		= av_frame_alloc();
+
+	if (strcmp(subsession_.codecName(), "JPEG") == 0) {
+		decoder_ = avcodec_find_decoder(CODEC_ID_MJPEG);
+		assert(decoder_ != nullptr);
+
+		decoderctx_ = avcodec_alloc_context3(decoder_);
+		if (decoder_->capabilities & CODEC_CAP_TRUNCATED)
+			decoderctx_->flags |= CODEC_CAP_TRUNCATED;
+		decoderctx_->flags2 |= CODEC_FLAG2_CHUNKS;
+		decoderctx_->thread_count = 2;
+
+		int error = avcodec_open2(decoderctx_, decoder_, nullptr);
+		assert(error >= 0);
+
+		return;
+	}
 
 	// Create PPS/SPS from SpropParameterSets from DESCRIBE
 	unsigned nrecords;
@@ -85,7 +101,7 @@ void H264DecoderSink::init_decoder()
 	}
 }
 
-cv::Mat H264DecoderSink::convert_to_cvmat()
+cv::Mat DecoderSink::convert_to_cvmat()
 {
 	cv::Mat m = cv::Mat::zeros(decoded_frame_->height, decoded_frame_->width,
 								CV_8UC3);
@@ -111,25 +127,28 @@ cv::Mat H264DecoderSink::convert_to_cvmat()
 	return m;
 }
 
-void H264DecoderSink::afterGettingFrame(void*		client_data,
+void DecoderSink::afterGettingFrame(void*		client_data,
 										unsigned	framesz,
 										unsigned	truncsz,
 										timeval		presentation_time,
 										unsigned	duration_in_microsecs)
 {
-	H264DecoderSink* sink = static_cast<H264DecoderSink*>(client_data);
+	DecoderSink* sink = static_cast<DecoderSink*>(client_data);
 	sink->afterGettingFrame(framesz, truncsz,
 			presentation_time, duration_in_microsecs);
 }
 
-void H264DecoderSink::afterGettingFrame(unsigned	framesz,
+void DecoderSink::afterGettingFrame(unsigned	framesz,
 										unsigned	truncsz,
 										timeval		presentation_time,
 										unsigned	duration_in_microsecs)
 {
 	unsigned char const start_code[] = {0x0, 0x0, 0x0, 0x1};
 
-	packet_.size = framesz + 4;
+	if (strcmp(subsession_.codecName(), "H264") == 0)
+		packet_.size = framesz + 4;
+	else
+		packet_.size = framesz;
 	packet_.data = recvbuf_;
 
 	while (packet_.size > 0) {
@@ -152,12 +171,16 @@ void H264DecoderSink::afterGettingFrame(unsigned	framesz,
 	continuePlaying();
 }
 
-Boolean H264DecoderSink::continuePlaying()
+Boolean DecoderSink::continuePlaying()
 {
 	if (fSource == 0) return False;
 
-	fSource->getNextFrame(recvbuf_ + 4, RECV_BUFSZ - 4, afterGettingFrame, this,
-			onSourceClosure, this);
+	if (strcmp(subsession_.codecName(), "H264") == 0)
+		fSource->getNextFrame(recvbuf_ + 4, RECV_BUFSZ - 4, afterGettingFrame, this,
+				onSourceClosure, this);
+	else
+		fSource->getNextFrame(recvbuf_, RECV_BUFSZ - 4, afterGettingFrame, this,
+				onSourceClosure, this);
 
 	return True;
 }

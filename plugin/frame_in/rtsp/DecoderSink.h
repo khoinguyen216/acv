@@ -11,21 +11,21 @@ extern "C" {
 #include <opencv2/opencv.hpp>
 
 
-class H264DecoderSink : public MediaSink {
+class DecoderSink : public MediaSink {
 
 	unsigned const RECV_BUFSZ = 1048576;
 
 public:
-	static H264DecoderSink* createNew(UsageEnvironment&		env,
+	static DecoderSink* createNew(UsageEnvironment&		env,
 									MediaSubsession&	subsession,
 									void*				consumer,
 									char const*			streamid = nullptr);
 private:
-	H264DecoderSink(UsageEnvironment&	env,
-					MediaSubsession&	subsession,
-					void*				consumer,
-					char const*			streamid);
-	virtual ~H264DecoderSink();
+	DecoderSink(UsageEnvironment&	env,
+				MediaSubsession&	subsession,
+				void*				consumer,
+				char const*			streamid);
+	virtual ~DecoderSink();
 
 	void init_decoder();
 	cv::Mat convert_to_cvmat();
