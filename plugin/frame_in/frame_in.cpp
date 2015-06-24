@@ -9,7 +9,7 @@
 #include "ui_frame_in.h"
 #endif
 #include "http_mjpg/http_mjpg_source.h"
-#include "rtsp_mjpg/rtsp_source.h"
+#include "rtsp/rtsp_source.h"
 #include "video/video_source.h"
 
 frame_in::frame_in()

@@ -2,7 +2,7 @@
 <acv>
 	<instances>
 		<instance id="Frame In" plugin="frame_in">
-			<option name="source" type="string" value="/home/nguyen/clipboard/LevisHK_Cam6_12012014140000.MP4"/>
+			<option name="source" type="string" value="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"/>
 			<option name="recover_on_error" type="boolean" value="no"/>
 			<option name="recover_interval" type="number" value="1"/>
 			<option name="read_timeout" type="number" value="2"/>

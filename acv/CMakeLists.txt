@@ -17,6 +17,7 @@ CONFIGURE_FILE ( ${CMAKE_SOURCE_DIR}/cmake/acv.vcxproj.user.in
 INCLUDE_DIRECTORIES (
 	../plugin
 	${Boost_INCLUDE_DIRS}
+	${FFmpeg_INCLUDE_DIRS}
 	${OpenCV_INCLUDE_DIRS})
 
 LINK_DIRECTORIES (
@@ -34,7 +35,7 @@ SET ( HEADER_FILES ${HEADER_FILES}
 
 SET ( SOURCE_FILES ${SOURCE_FILES}
     main.cpp acv.cpp plugin_factory.cpp inst_graph.cpp cable_info.cpp
-	opencv_link.cpp )
+	ffmpeg_link.cpp opencv_link.cpp )
 
 # Fix RPATH
 SET ( CMAKE_SKIP_BUILD_RPATH FALSE )

@@ -21,14 +21,19 @@ SET ( HEADER_FILES ${QT_UI_HEADERS} frame_in.h frame_source.h
 	video/video_source.h
 	http_mjpg/http_mjpg_source.h
 	http_mjpg/MjpgCapture.h
-	rtsp_h264/rtsp_h264_source.h
-	rtsp_mjpg/rtsp_source.h )
+	rtsp/rtsp_source.h
+	rtsp/rtsp_handlers.h
+	rtsp/sched_thread.h
+	rtsp/H264DecoderSink.h
+	rtsp/MPRTSPClient.h )
 SET ( SOURCE_FILES frame_in.cpp
 	video/video_source.cpp
 	http_mjpg/http_mjpg_source.cpp
 	http_mjpg/MjpgCapture.cpp
-	rtsp_h264/rtsp_h264_source.cpp
-	rtsp_mjpg/rtsp_source.cpp )
+	rtsp/rtsp_source.cpp
+	rtsp/rtsp_handlers.cpp
+	rtsp/H264DecoderSink.cpp
+	rtsp/MPRTSPClient.cpp )
 
 ADD_DEFINITIONS ( -DQT_PLUGIN )
 
@@ -48,7 +53,8 @@ ENDIF()
 ADD_LIBRARY ( ${MOD_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} )
 QT5_USE_MODULES ( ${MOD_NAME} Widgets )
 TARGET_LINK_LIBRARIES ( ${MOD_NAME}
-	${OpenCV_LIBRARIES} ${FFmpeg_LIBRARIES} ${LiveMedia_LIBRARIES} )
+	${LiveMedia_LIBRARIES}
+	${OpenCV_LIBRARIES} ${FFmpeg_LIBRARIES} )
 
 # Install
 IF ( WIN32 )

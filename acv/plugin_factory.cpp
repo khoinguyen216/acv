@@ -64,6 +64,10 @@ QPluginLoader *plugin_factory::load_plugin(QString const& file)
 
 	// Try creating an instance to see if it is really of our class
 	auto inst = loader->instance();
+	if (inst == 0) {
+		 qDebug() << loader->errorString();
+	}
+
 	if (qobject_cast<acv_plugin *>(inst) == 0) {
 		delete loader;
 		loader = 0;
