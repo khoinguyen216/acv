@@ -41,9 +41,6 @@ public slots:
 	void recover_on_error(bool v);
 	void recover_interval(double v);
 	void read_timeout(double v);
-
-signals:
-	// Player controls
 	void start();
 	void stop();
 
@@ -56,11 +53,11 @@ signals:
 
 private slots:
 	// Internal handlers for frame source events
-	void on_started();
-	void on_stopped();
-	void on_frame(cv::Mat const& frame, double ts);
-	void on_error(QDateTime const& ts, QString e);
-	void on_read_timeout();
+	void on_source_started();
+	void on_source_stopped();
+	void on_source_frame(cv::Mat const& frame, double ts);
+	void on_source_error(QDateTime const& ts, QString e);
+	void on_source_read_timeout();
 
 private:
 	void connect_to_source(frame_source* s);
@@ -69,14 +66,14 @@ private:
 	QHash<QString, plugin_socket>	sockets_;
 	plugin_options	options_;
 	QString			source_;
-	bool			recover_;
-	double			recover_interval_;
-	double			read_timeout_;
+	bool			recover_			= false;
+	double			recover_interval_	= 0;
+	double			read_timeout_		= 0;
 
-	QThread*		workthread_ = 0;
-	frame_source*	fs_ = 0;
-	QTimer*			read_deadline_;
-	QTimer*			recover_timer_;
+	QThread*		workthread_		= nullptr;
+	frame_source*	fs_				= nullptr;
+	QTimer*			read_deadline_	= nullptr;
+	QTimer*			recover_timer_	= nullptr;
 
 #ifdef WITH_GUI
 public slots:

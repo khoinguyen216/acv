@@ -98,17 +98,17 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="readTimeoutLabel">
-        <property name="text">
-         <string>-</string>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="recoverIntervalEdit">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="recoverIntervalLabel">
-        <property name="text">
-         <string>-</string>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="readTimeoutEdit">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -202,6 +202,12 @@
     <widget class="QGraphicsView" name="frameView">
      <property name="styleSheet">
       <string notr="true">background: transparent;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
      </property>
     </widget>
    </item>

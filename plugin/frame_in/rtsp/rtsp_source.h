@@ -6,6 +6,7 @@
 class QTimer;
 
 class sched_thread;
+class Authenticator;
 class RTSPClient;
 class TaskScheduler;
 class UsageEnvironment;
@@ -37,4 +38,7 @@ private:
 	UsageEnvironment*	env_			= nullptr;
 	sched_thread*		sched_thread_	= nullptr;
 	char				watchvar_;
+	char*				username_		= nullptr;
+	char*				password_		= nullptr;
+	Authenticator*		auth_			= nullptr;
 };

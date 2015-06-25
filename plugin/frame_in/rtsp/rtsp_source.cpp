@@ -16,15 +16,15 @@
 rtsp_source::rtsp_source(QString const& s) : frame_source(s),
 	timer_(new QTimer(this))
 {
-	assert(!s.isEmpty());
-
-
 	sched_thread_ = new sched_thread();
 }
 
 rtsp_source::~rtsp_source()
 {
 	delete sched_;
+	delete[] username_;
+	delete[] password_;
+	delete auth_;
 }
 
 void rtsp_source::start()
@@ -35,9 +35,27 @@ void rtsp_source::start()
 	sched_	= BasicTaskScheduler::createNew();
 	env_	= BasicUsageEnvironment::createNew(*sched_);
 
+	// Validate and parse RTSP URL
+	NetAddress	addr;
+	portNumBits	port;
+	bool url_ok = RTSPClient::parseRTSPURL(*env_,
+							source_.toStdString().c_str(),
+							username_, password_, addr, port, nullptr);
+	if (!url_ok) {
+		 emit error(QDateTime::currentDateTime(),
+				 QString("%1 is malformed").arg(source_));
+		 return;
+	}
+
+	// Remove username:password from the URL and put them into authenticator
+	QString pattern = QString("//%1:%2@").arg(username_).arg(password_);
+	source_.replace(pattern, "//");
+
+	// Start scheduler and client
 	sched_thread_->setScheduler(sched_);
 	sched_thread_->enableScheduler();
 	sched_thread_->start();
+
 	client_ = MPRTSPClient::createNew(*env_, source_.toStdString().c_str(),
 				this, 2, "kclient");
 	if (client_ == nullptr) {
@@ -46,7 +64,8 @@ void rtsp_source::start()
 		return;
 	}
 
-	client_->sendDescribeCommand(after_describe);
+	auth_ = new Authenticator("admin", "admin");
+	client_->sendDescribeCommand(after_describe, auth_);
 	start_ts_.start();
 	emit started();
 }
@@ -56,7 +75,8 @@ void rtsp_source::stop()
 	sched_thread_->disableScheduler();
 	sched_thread_->wait();
 	shutdown(client_);
-	Medium::close(client_); client_ = nullptr;
+	Medium::close(client_);
+	client_ = nullptr;
 	env_->reclaim();
 	delete sched_; sched_ = nullptr;
 	emit stopped();

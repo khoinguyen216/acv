@@ -24,7 +24,7 @@ void after_describe(RTSPClient* client, int result, char* resultstr)
 		auto const sdp = resultstr;
 		cl->session_ = MediaSession::createNew(env, sdp);
 		delete[] resultstr;
-		if (cl->session_ == 0 || !cl->session_->hasSubsessions())
+		if (cl->session_ == nullptr || !cl->session_->hasSubsessions())
 			break;
 		cl->iter_ = new MediaSubsessionIterator(*cl->session_);
 		setup_next_subsession(cl);
@@ -68,15 +68,13 @@ void after_play(RTSPClient* client, int result, char* resultstr)
 	bool ok		= false;
 
 	do {
-		if (result != 0)
+		if (result != 0) {
 			// Could not start playing the stream
 			break;
+		}
 		ok = true;
 	} while (0);
 	delete[] resultstr;
-
-	if (!ok)
-		shutdown(cl);
 }
 
 void subsession_after_playing(void* data)
@@ -140,7 +138,6 @@ void setup_next_subsession(RTSPClient* client)
 void shutdown(RTSPClient* client, int exit_code)
 {
 	auto cl = static_cast<MPRTSPClient *>(client);
-	auto& env = cl->envir();
 
 	// Close all open sinks
 	bool has_active_subsessions = false;
