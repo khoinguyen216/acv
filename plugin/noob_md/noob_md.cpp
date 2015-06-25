@@ -45,6 +45,10 @@ void noob_md::init()
 	sockets_["video"].dir_out = false;
 	sockets_["video"].wires["frame"] = "process_frame(cv::Mat const&, double)";
 
+	sockets_["vidctrl"].dir_out = true;
+	sockets_["vidctrl"].wires["start"] = "start_video()";
+	sockets_["vidctrl"].wires["stop"] = "stop_video()";
+
 #ifdef WITH_GUI
 	ui_ = new Ui_NoobMdUi();
 #endif
@@ -66,6 +70,8 @@ void noob_md::setupui(QWidget* parent)
 
 	ui_->frameView->setScene(&scene_);
 	ui_->frameView->show();
+	connect(ui_->startButton, SIGNAL(clicked()), this, SIGNAL(start_video()));
+	connect(ui_->stopButton, SIGNAL(clicked()), this, SIGNAL(stop_video()));
 }
 #endif
 

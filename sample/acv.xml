@@ -11,6 +11,7 @@
 		</instance>
 	</instances>
 	<connections>
-		<!--<cable end0="Frame In.vout" end1="Motion Detector.video"/>-->
+		<cable end0="Frame In.vout" end1="Motion Detector.video"/>
+		<cable end0="Motion Detector.vidctrl" end1="Frame In.ctrl"/>
 	</connections>
 </acv>

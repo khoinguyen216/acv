@@ -41,6 +41,8 @@ public slots:
 
 signals:
 	void detected(std::vector<cv::Rect> boxes);
+	void start_video();
+	void stop_video();
 
 private:
 #ifdef WITH_GUI
