@@ -202,7 +202,7 @@ void frame_in::on_source_error(QDateTime const& ts, QString e)
 	read_deadline_->stop();
 	if (recover_) {
 		recover_timer_->singleShot(recover_interval_ * 1000,
-									this, SIGNAL(start()));
+									this, SLOT(start()));
 	}
 #ifdef WITH_GUI
 	ui_->errorLabel->setText(QString("%1 %2").arg(ts.toString()).arg(e));

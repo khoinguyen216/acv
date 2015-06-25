@@ -64,7 +64,7 @@ void rtsp_source::start()
 		return;
 	}
 
-	auth_ = new Authenticator("admin", "admin");
+	auth_ = new Authenticator(username_, password_);
 	client_->sendDescribeCommand(after_describe, auth_);
 	start_ts_.start();
 	emit started();
