@@ -7,6 +7,7 @@
 
 class cable_info {
 public:
+	cable_info() {}
 	cable_info(QString const& inst_a, QString const& socket_a,
 				QString const& inst_b, QString const& socket_b)
 		: inst_a_(inst_a), socket_a_(socket_a),

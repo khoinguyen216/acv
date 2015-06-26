@@ -53,8 +53,49 @@ acv::~acv()
 {
 }
 
+void acv::configure_cmdparser(QCommandLineParser& p)
+{
+	p.setApplicationDescription("KAI Square ACV");
+	p.setSingleDashWordOptionMode(
+			QCommandLineParser::ParseAsLongOptions);
+
+	p.addOptions({
+		{"i", "Input video source (file | http | rtsp)", "url"},
+		{"recover", "Recover from input error"},
+		{"tv", "Velocity threshold", "double"}
+	});
+}
+
 void acv::process_cmdargs()
 {
+	QCommandLineParser p;
+	// Default options
+	auto const& help_opt = p.addHelpOption();
+	auto const& ver_opt = p.addVersionOption();
+
+	configure_cmdparser(p);
+
+	if (!p.parse(arguments())) {
+		QTextStream(stdout) << p.errorText();
+		exit(-1);
+	}
+
+	if (p.isSet(help_opt)) {
+		p.showHelp();
+		Q_UNREACHABLE();
+	}
+	if (p.isSet(ver_opt)) {
+		p.showVersion();
+		Q_UNREACHABLE();
+	}
+	if (p.isSet("i")) {
+		inst_option opt("source", "string", p.value("i"));
+		config_.option("Frame In", opt);
+	}
+	if (p.isSet("recover")) {
+		inst_option opt("recover_on_error", "boolean", "yes");
+		config_.option("Frame In", opt);
+	}
 }
 
 void acv::load_config()
@@ -82,17 +123,10 @@ void acv::load_config_from_xml(QString const& path, acv_config& config)
 		auto const& plugin = attrs.namedItem("plugin").nodeValue();
 
 		// Instance id and plugin
-		auto it = find_if(config.insts.begin(), config.insts.end(),
-				[&instid] (inst_info const& e) {
-					return e.id() == instid;
-				});
-		if (it == config.insts.end()) {
-			config.insts.emplace_back(instid, plugin);
-			it = config.insts.end();
-			--it;
-		} else {
-			*it = inst_info(instid, plugin);
+		if (!config_.insts().contains(instid)) {
+			config_.insts().insert(instid, inst_info(instid, plugin));
 		}
+		auto it = config_.insts().find(instid);
 
 		// Instance default config
 		QDomElement optnode = instnode.firstChildElement("option");
@@ -117,15 +151,15 @@ void acv::load_config_from_xml(QString const& path, acv_config& config)
 		auto const& end0 = attrs.namedItem("end0").nodeValue();
 		auto const& end1 = attrs.namedItem("end1").nodeValue();
 
-		auto it = find_if(config.cables.begin(), config.cables.end(),
+		auto it = find_if(config.cables().begin(), config.cables().end(),
 				[&end0, &end1] (cable_info const& e) {
 					return (e.inst_a() == end0 && e.inst_b() == end1)
 						|| (e.inst_a() == end1 && e.inst_b() == end0);
 				});
-		if (it == config.cables.end()) {
+		if (it == config.cables().end()) {
 			cable_info w(" ", " ", " ", " ");
 			make_cable_from_strings(end0, end1, w);
-			config.cables.push_back(w);
+			config.cables().push_back(w);
 		}
 	}
 }
@@ -143,7 +177,7 @@ void acv::setup()
 
 	// Create pre-configure and start all instances
 	QStringList insts;
-	for (auto const& info : config_.insts) {
+	for (auto const& info : config_.insts()) {
 		auto inst = plugin_factory_->create_instance(info.id(), info.plugin());
 		if (inst != 0) {
 			inst->init();
@@ -169,7 +203,7 @@ void acv::setup()
 	}
 
 	// Create cables
-	for (auto const& cable : config_.cables) {
+	for (auto const& cable : config_.cables()) {
 		 qDebug() << cable.inst_a() << "." << cable.socket_a() << " -> "
 				 << cable.inst_b() << "." << cable.socket_b();
 		 inst_graph_->add_cable(cable);

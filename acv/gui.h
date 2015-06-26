@@ -25,8 +25,8 @@ public:
 
 public slots:
 	// Handle events from acv
-	void on_plugins_refreshed(QStringList const& plugins);
-	void on_instance_created(acv_plugin* inst);
+	void handle_plugins_refreshed(QStringList const& plugins);
+	void handle_instance_created(acv_plugin* inst);
 
 	// Handle events from UI
 	void on_instListView_clicked(QModelIndex const& index);

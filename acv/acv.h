@@ -1,6 +1,7 @@
 #ifndef ACV_H
 #define ACV_H
 
+#include <QCommandLineParser>
 #ifdef WITH_GUI
 #include <QApplication>
 #include <QMainWindow>
@@ -44,6 +45,7 @@ signals:
 	void instance_created(acv_plugin* inst);
 
 private:
+	void configure_cmdparser(QCommandLineParser& p);
 	void load_config_from_xml(QString const& path, acv_config& config);
 	void setup_ui();
 

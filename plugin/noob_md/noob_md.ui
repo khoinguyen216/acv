@@ -111,7 +111,17 @@
     </widget>
    </item>
    <item>
-    <widget class="QGraphicsView" name="frameView"/>
+    <widget class="QGraphicsView" name="frameView">
+     <property name="styleSheet">
+      <string notr="true">background: transparent;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 
 	acv app(argc, argv);
 	app.load_config();
+	app.process_cmdargs();
 	app.setup();
 
 	return app.exec();

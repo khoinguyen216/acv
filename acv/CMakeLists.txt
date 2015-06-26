@@ -36,7 +36,8 @@ SET ( HEADER_FILES ${HEADER_FILES}
 	acv_config.h )
 
 SET ( SOURCE_FILES ${SOURCE_FILES}
-    main.cpp acv.cpp plugin_factory.cpp inst_graph.cpp cable_info.cpp
+    main.cpp acv.cpp acv_config.cpp plugin_factory.cpp inst_graph.cpp
+	inst_info.cpp cable_info.cpp
 	ffmpeg_link.cpp livemedia_link.cpp opencv_link.cpp )
 
 # Fix RPATH

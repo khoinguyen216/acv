@@ -34,12 +34,12 @@ Gui::~Gui()
 void Gui::setup_connections(acv *app)
 {
 	connect(app, SIGNAL(plugins_refreshed(QStringList const&)),
-			this, SLOT(on_plugins_refreshed(QStringList const&)));
+			this, SLOT(handle_plugins_refreshed(QStringList const&)));
 	connect(app, SIGNAL(instance_created(acv_plugin *)),
-			this, SLOT(on_instance_created(acv_plugin *)));
+			this, SLOT(handle_instance_created(acv_plugin *)));
 }
 
-void Gui::on_plugins_refreshed(QStringList const& plugins)
+void Gui::handle_plugins_refreshed(QStringList const& plugins)
 {
 	auto rows = plugins_model_.rowCount();
 	plugins_model_.removeRows(0, rows);
@@ -49,7 +49,7 @@ void Gui::on_plugins_refreshed(QStringList const& plugins)
 	}
 }
 
-void Gui::on_instance_created(acv_plugin* inst)
+void Gui::handle_instance_created(acv_plugin* inst)
 {
 	auto rows = insts_model_.rowCount();
 	insts_model_.insertRows(rows, 1);
