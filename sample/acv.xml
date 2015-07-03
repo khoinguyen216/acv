@@ -9,9 +9,13 @@
 		</instance>
 		<instance id="Motion Detector" plugin="noob_md">
 		</instance>
+		<instance id="File Recorder" plugin="frame_out">
+			<option name="destination" type="string" value="${APP_DIR}/record.mp4"/>
+		</instance>
 	</instances>
 	<connections>
 		<cable end0="Frame In.vout" end1="Motion Detector.video"/>
 		<cable end0="Motion Detector.vidctrl" end1="Frame In.ctrl"/>
+		<cable end0="Frame In.vout" end1="File Recorder.vin"/>
 	</connections>
 </acv>

@@ -27,11 +27,17 @@ typedef QVector<plugin_option> plugin_options;
 
 class acv_plugin : public QObject {
 public:
+	acv_plugin() {}
 	virtual	~acv_plugin() {}
 
 	virtual void init() = 0;
 	virtual	plugin_socket const expose_socket(QString const& s) const = 0;
 	virtual plugin_options const& options() const = 0;
+
+// Disable copy constructor and assignment operator
+private:
+	acv_plugin(acv_plugin const&);
+	acv_plugin& operator=(acv_plugin const&);
 
 public slots:
 #ifdef WITH_GUI

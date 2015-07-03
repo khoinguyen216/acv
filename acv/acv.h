@@ -18,6 +18,7 @@ class Gui;
 class acv_plugin;
 class inst_graph;
 class plugin_factory;
+class script_if;
 
 #define CONFIG_MAXSIZE			(1024 * 1024)
 #define DEFAULT_CONFIG_FILE		"acv.xml"
@@ -53,6 +54,7 @@ private:
 	acv_config			config_;
 	plugin_factory*		plugin_factory_;
 	inst_graph*			inst_graph_;
+	script_if*			script_;
 
 #ifdef WITH_GUI
 	Gui*    mainwnd_;

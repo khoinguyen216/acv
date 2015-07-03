@@ -19,11 +19,13 @@ INCLUDE_DIRECTORIES (
 	${Boost_INCLUDE_DIRS}
 	${FFmpeg_INCLUDE_DIRS}
 	${LiveMedia_INCLUDE_DIRS}
+	${Lua_INCLUDE_DIRS}
 	${OpenCV_INCLUDE_DIRS})
 
 LINK_DIRECTORIES (
 	${FFmpeg_LIBDIR}
-	${LiveMedia_LIBDIR} ) 
+	${LiveMedia_LIBDIR}
+	${Lua_LIBDIR} )
 
 IF ( WITH_GUI )
 	QT5_WRAP_UI ( QT_UI_HEADERS mainwindow.ui )
@@ -33,11 +35,13 @@ ENDIF()
 
 SET ( HEADER_FILES ${HEADER_FILES}
 	version.h inst_info.h cable_info.h plugin_factory.h inst_graph.h
+	script_if.h
 	acv_config.h )
 
 SET ( SOURCE_FILES ${SOURCE_FILES}
     main.cpp acv.cpp acv_config.cpp plugin_factory.cpp inst_graph.cpp
 	inst_info.cpp cable_info.cpp
+	script_if.cpp
 	ffmpeg_link.cpp livemedia_link.cpp opencv_link.cpp )
 
 # Fix RPATH
@@ -53,13 +57,14 @@ IF ( MSVC )
 ENDIF()
 
 ADD_EXECUTABLE ( ${MOD_NAME} ${SOURCE_FILES} ${HEADER_FILES} )
-QT5_USE_MODULES ( ${MOD_NAME} Core Xml )
+QT5_USE_MODULES ( ${MOD_NAME} Core Xml Network )
 IF ( WITH_GUI )
 	QT5_USE_MODULES ( ${MOD_NAME} Widgets )
 ENDIF()
 
 TARGET_LINK_LIBRARIES ( ${MOD_NAME}
 	${Boost_LIBRARIES} ${FFmpeg_LIBRARIES} ${LiveMedia_LIBRARIES}
+	${Lua_LIBRARIES}
 	${OpenCV_LIBRARIES} )
 
 IF ( WIN32 )

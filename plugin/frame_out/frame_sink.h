@@ -1,5 +1,5 @@
-#ifndef FRAME_SOURCE_H
-#define FRAME_SOURCE_H
+#ifndef FRAME_SINK_H
+#define FRAME_SINK_H
 
 #include <QDateTime>
 #include <QObject>
@@ -8,27 +8,27 @@
 #include <opencv2/opencv.hpp>
 
 
-class frame_source : public QObject {
+class frame_sink : public QObject {
 public:
-	frame_source(QString const& s) : source_(s) {}
-	virtual ~frame_source() {}
+	frame_sink(QString const& d) : destination_(d) {}
+	~frame_sink() {}
 
 private:
-	frame_source(frame_source const &);
-	frame_source& operator=(frame_source const &);
+	frame_sink(frame_sink const&);
+	frame_sink& operator=(frame_sink const&);
 
 public slots:
 	virtual void start() = 0;
 	virtual void stop() = 0;
+	virtual void frame(cv::Mat const& f, double ts) = 0;
 
 signals:
 	virtual void started() = 0;
 	virtual void stopped() = 0;
-	virtual void frame(cv::Mat const& f, double ts) = 0;
 	virtual void error(QDateTime const& ts, QString const& e) = 0;
 
 protected:
-	QString source_;
+	QString destination_;
 };
 
 #endif

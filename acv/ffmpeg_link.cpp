@@ -1,5 +1,6 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 }
 
@@ -33,4 +34,7 @@ void ffmpeg_link()
 	avcodec_register_all();
 	char const* sws_config = swscale_configuration();
 	av_lockmgr_register(av_lockmgr_cb);
+
+	AVFormatContext* fmtctx = avformat_alloc_context();
+	avformat_free_context(fmtctx);
 }

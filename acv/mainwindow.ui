@@ -97,6 +97,9 @@
            <property name="leftMargin">
             <number>18</number>
            </property>
+           <property name="topMargin">
+            <number>18</number>
+           </property>
            <item>
             <widget class="QLabel" name="label_3">
              <property name="font">

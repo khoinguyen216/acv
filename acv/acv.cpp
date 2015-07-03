@@ -20,6 +20,7 @@
 #include "inst_graph.h"
 #include "inst_info.h"
 #include "plugin_factory.h"
+#include "script_if.h"
 #include "version.h"
 
 
@@ -47,6 +48,8 @@ acv::acv(int &argc, char **argv) :
 	plugin_factory_ = new plugin_factory(plugindir);
 
 	inst_graph_ = new inst_graph();
+	script_ = new script_if(this);
+	script_->start_server(5555);
 }
 
 acv::~acv()
